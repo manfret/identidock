@@ -10,6 +10,6 @@ public class WeatherService : IWeatherService
     public string GetLooksLike(string input)
     {
         var res = input.Reverse();
-        return string.Join("", res);
+        return $"--{string.Join("", res)}--";
     }
 }
