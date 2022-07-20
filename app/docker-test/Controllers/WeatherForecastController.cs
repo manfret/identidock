@@ -1,4 +1,6 @@
+using docker_test.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 
 namespace docker_test.Controllers
 {
@@ -12,10 +14,14 @@ namespace docker_test.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IWeatherService _weatherService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(
+            ILogger<WeatherForecastController> logger,
+            IWeatherService weatherService)
         {
             _logger = logger;
+            _weatherService = weatherService;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -33,15 +39,15 @@ namespace docker_test.Controllers
         [HttpGet("t")]
         public async Task<ActionResult> HelloWorld()
         {
-            var helloWorld = "Hello World!";
-            var input = "Manfret";
-            var res = $"<b>{helloWorld}</b>";
+            var header = "Try reverse";
+            var placeholder = "result will be here";
+            var res = $"<p>{header}</p>";
             res += @"<form method='POST' action='p'>
 <input type='text' name='inp' value=''>
 <input type='submit' value='submit'>
 </form>
 <p>You look like a:</p>";
-            res += $"<p><b>{input}</b></p>";
+            res += $"<p>{placeholder}</p>";
             
             var response = new ContentResult
             {
@@ -54,15 +60,15 @@ namespace docker_test.Controllers
         [HttpPost("p")]
         public async Task<ActionResult> HelloWorld([FromForm]string? inp)
         {
-            var helloWorld = "Hello World!";
-            var input = inp ?? "123";
-            var res = $"<b>{helloWorld}</b>";
+            var header = "Try reverse";
+            var output = inp == null ? "provide some value" : _weatherService.GetLooksLike(inp);
+            var res = $"<b>{header}</b>";
             res += @"<form method='POST'>
 <input type='text' name='inp' value=''>
 <input type='submit' value='submit'>
 </form>
 <p>You look like a:</p>";
-            res += $"<p><b>{input}</b></p>";
+            res += $"<p><b>{output}</b></p>";
 
             var response = new ContentResult
             {
