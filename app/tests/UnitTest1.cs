@@ -19,7 +19,7 @@ namespace tests
             var start = "123";
             var res = _ws.GetLooksLike(start);
 
-            Assert.AreEqual("3321", res);
+            Assert.AreEqual("--321--", res);
         }
     }
 }
